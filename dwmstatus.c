@@ -18,7 +18,7 @@
 
 #include <X11/Xlib.h>
 
-char *tzargentina = "Asia/Kolkata";
+char *timezon = "Asia/Kolkata";
 char *tzutc = "UTC";
 char *tzberlin = "Europe/Berlin";
 
@@ -129,10 +129,10 @@ getbattery(char *base)
 	co = readfile(base, "status");
 	if (!strncmp(co, "Discharging", 11)) {
 		free(co);
-		return smprintf("󰁹 %d", percent);
+		return smprintf("󰂍 %d", percent);
 	} else if(!strncmp(co, "Charging", 8)) {
 		free(co);
-		return smprintf("󰁹 %d", percent);
+		return smprintf("󰂐 %d", percent);
 	} else if(!strncmp(co, "Full", 4)) {
 	       	free(co);
 		return smprintf("󰁹 %d", percent);
@@ -200,7 +200,7 @@ getmemory(void)
     double availPhysMem = avail_mem / (1024 * 1024);
     int memoryUsage = (int)((totalPhysMem - availPhysMem) * 100 / totalPhysMem);
 
-    return smprintf("%.2lf GB / %.2lf GB (%d%%)", totalPhysMem - availPhysMem, totalPhysMem, memoryUsage);
+    return smprintf("%.2lf GB (%d%%)", totalPhysMem - availPhysMem, memoryUsage);
 }
 /*
 char *
@@ -232,7 +232,8 @@ main(void)
 	char *status;
 	// char *avgs;
 	char *bat;
-	char *tmar;
+	char *time;
+	char *date;
 	// char *tmutc;
 	// char *tmbln;
 	char *t0;
@@ -250,7 +251,8 @@ main(void)
 	for(;;sleep(3)) {
 		// avgs = loadavg();
 		bat = getbattery("/sys/class/power_supply/BAT1");
-		tmar = mktimes("%H:%M", tzargentina);
+		time = mktimes("%I:%M %p", timezon);
+		date = mktimes("%a %d-%m-%Y", timezon);
 		memory = getmemory();
 		volume = getvolume();
 		// tmutc = mktimes("%H:%M", tzutc);
@@ -260,7 +262,7 @@ main(void)
 		t0 = gettemperature("/sys/devices/virtual/thermal/thermal_zone0", "temp");
 		// t1 = gettemperature("/sys/devices/virtual/thermal/thermal_zone1", "temp");
 
-		status = smprintf("|   %s | V: %s | %s | %s |   %s |", t0, volume, memory, bat, tmar);
+		status = smprintf("  %s |  %s |   %s | %s |   %s |   %s |", t0, volume, memory, bat, date, time);
 		setstatus(status);
 
 		// free(surfs);
@@ -271,7 +273,8 @@ main(void)
 		// free(t1);
 		// free(avgs);
 		free(bat);
-		free(tmar);
+		free(time);
+		free(date);
 		// free(tmutc);
 		// free(tmbln);
 		free(status);
