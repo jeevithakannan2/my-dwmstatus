@@ -262,7 +262,7 @@ main(void)
 		t0 = gettemperature("/sys/devices/virtual/thermal/thermal_zone0", "temp");
 		// t1 = gettemperature("/sys/devices/virtual/thermal/thermal_zone1", "temp");
 
-		status = smprintf("  %s |  %s |   %s | %s |   %s |   %s |", t0, volume, memory, bat, date, time);
+		status = smprintf("  %s |  %s |    %s | %s |   %s |   %s |", t0, volume, memory, bat, date, time);
 		setstatus(status);
 
 		// free(surfs);
