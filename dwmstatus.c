@@ -119,7 +119,7 @@ readfile(char *base, char *file)
 char *
 getbattery(char *base)
 {
-	char *co, status;
+	char *co;
 	int percent;
         
 	co = readfile(base, "capacity");
@@ -220,10 +220,23 @@ char *
 getvolume() {
 	FILE *fp;
 	int volume;
-	fp = popen("pamixer --get-volume", "r");
-	fscanf(fp, "%d", &volume);
+	char line[256];
+	char mute[4];
+
+	fp = popen("pactl get-sink-mute @DEFAULT_SINK@", "r");
+	fgets(line, sizeof(line), fp);
+
+	sscanf(line, "Mute: %s", mute);
 	pclose(fp);
-	return smprintf("%d%%", volume);
+
+	if (!strncmp(mute,"yes",3))
+		return smprintf("  0%%");
+	else {
+		fp = popen("pamixer --get-volume", "r");
+		fscanf(fp, "%d", &volume);
+		pclose(fp);
+		return smprintf(" %d%%", volume);
+	}
 }
 
 int
@@ -262,7 +275,7 @@ main(void)
 		t0 = gettemperature("/sys/devices/virtual/thermal/thermal_zone0", "temp");
 		// t1 = gettemperature("/sys/devices/virtual/thermal/thermal_zone1", "temp");
 
-		status = smprintf("  %s |  %s |    %s | %s |   %s |   %s |", t0, volume, memory, bat, date, time);
+		status = smprintf("  %s | %s |    %s | %s |   %s |   %s |", t0, volume, memory, bat, date, time);
 		setstatus(status);
 
 		// free(surfs);
