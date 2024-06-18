@@ -129,16 +129,16 @@ getbattery(char *base)
 	co = readfile(base, "status");
 	if (!strncmp(co, "Discharging", 11)) {
 		free(co);
-		return smprintf("󰂍 %d", percent);
+		return smprintf("󰂍  %d", percent);
 	} else if(!strncmp(co, "Charging", 8)) {
 		free(co);
-		return smprintf("󰂐 %d", percent);
+		return smprintf("󰂐  %d", percent);
 	} else if(!strncmp(co, "Full", 4)) {
 	       	free(co);
-		return smprintf("󰁹 %d", percent);
+		return smprintf("󰁹  %d", percent);
 	} else {
 		free(co);
-		return smprintf("󰁹 %d", percent);
+		return smprintf("󰁹  %d", percent);
 	}
 }
 
@@ -235,7 +235,7 @@ getvolume() {
 		fp = popen("pamixer --get-volume", "r");
 		fscanf(fp, "%d", &volume);
 		pclose(fp);
-		return smprintf(" %d%%", volume);
+		return smprintf("  %d%%", volume);
 	}
 }
 
@@ -275,7 +275,7 @@ main(void)
 		t0 = gettemperature("/sys/devices/virtual/thermal/thermal_zone0", "temp");
 		// t1 = gettemperature("/sys/devices/virtual/thermal/thermal_zone1", "temp");
 
-		status = smprintf("  %s | %s |    %s | %s |   %s |   %s |", t0, volume, memory, bat, date, time);
+		status = smprintf("  %s  |  %s  |    %s  |  %s  |    %s  |    %s  |", t0, volume, memory, bat, date, time);
 		setstatus(status);
 
 		// free(surfs);
