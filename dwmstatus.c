@@ -243,18 +243,12 @@ int
 main(void)
 {
 	char *status;
-	// char *avgs;
 	char *bat;
 	char *time;
 	char *date;
-	// char *tmutc;
-	// char *tmbln;
 	char *t0;
 	char *memory;
 	char *volume;
-	// char *t1;
-	// char *kbmap;
-	// char *surfs;
 
 	if (!(dpy = XOpenDisplay(NULL))) {
 		fprintf(stderr, "dwmstatus: cannot open display.\n");
@@ -262,34 +256,22 @@ main(void)
 	}
 
 	for(;;sleep(3)) {
-		// avgs = loadavg();
 		bat = getbattery("/sys/class/power_supply/BAT1");
 		time = mktimes("%I:%M %p", timezon);
 		date = mktimes("%a %d-%m-%Y", timezon);
 		memory = getmemory();
 		volume = getvolume();
-		// tmutc = mktimes("%H:%M", tzutc);
-		// tmbln = mktimes("KW %W %a %d %b %H:%M %Z %Y", tzberlin);
-		// kbmap = execscript("setxkbmap -query | grep layout | cut -d':' -f 2- | tr -d ' '");
-		// surfs = execscript("surf-status");
 		t0 = gettemperature("/sys/devices/virtual/thermal/thermal_zone0", "temp");
-		// t1 = gettemperature("/sys/devices/virtual/thermal/thermal_zone1", "temp");
 
 		status = smprintf("  %s  |  %s  |    %s  |  %s  |    %s  |    %s  |", t0, volume, memory, bat, date, time);
 		setstatus(status);
 
-		// free(surfs);
-		// free(kbmap);
 		free(t0);
 		free(memory);
 		free(volume);
-		// free(t1);
-		// free(avgs);
 		free(bat);
 		free(time);
 		free(date);
-		// free(tmutc);
-		// free(tmbln);
 		free(status);
 	}
 
