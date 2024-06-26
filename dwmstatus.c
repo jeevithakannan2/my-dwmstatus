@@ -202,19 +202,6 @@ getmemory(void)
 
     return smprintf("%.2lf GB (%d%%)", totalPhysMem - availPhysMem, memoryUsage);
 }
-/*
-char *
-getmemory(void)
-{
-    struct sysinfo memInfo;
-    sysinfo(&memInfo);
-    long long totalPhysMem = memInfo.totalram * memInfo.mem_unit / (1024 * 1024 * 1024);
-    long long freePhysMem = memInfo.freeram * memInfo.mem_unit / (1024 * 1024 * 1024);
-    int memoryUsage = (int)((totalPhysMem - freePhysMem) * 100 / totalPhysMem);
-
-    return smprintf("%lld GB / %lld GB (%d%%)", totalPhysMem - freePhysMem, totalPhysMem, memoryUsage);
-}
-*/
 
 char *
 getvolume() {
